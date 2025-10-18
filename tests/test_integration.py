@@ -12,14 +12,14 @@ SCRIPT = ROOT / "src" / "usage_monitor.py"
 
 def start_server(extra_env=None):
     env = os.environ.copy()
-    # Ensure no OAuth creds by pointing HOME to a temp dir
+    if extra_env:
+        env.update(extra_env)
+    # Ensure no OAuth creds by pointing HOME to a temp dir (force override)
     temp_home = ROOT / ".tmp_home"
     temp_home.mkdir(exist_ok=True)
     env["HOME"] = str(temp_home)
-    # Simulate API key mode to verify fast-fail
+    # Simulate API key mode to verify fast-fail (only set default if not provided)
     env.setdefault("GEMINI_API_KEY", "dummy-key")
-    if extra_env:
-        env.update(extra_env)
     proc = subprocess.Popen(
         [sys.executable, "-u", str(SCRIPT)],
         cwd=str(ROOT),
