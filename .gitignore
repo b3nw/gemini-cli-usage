@@ -1,0 +1,28 @@
+# Documentation that shouldn't be committed
+devdocs/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Testing and development
+*.log
+.pytest_cache/
+.coverage
+
+# User-specific files
+.env
+.envrc
+

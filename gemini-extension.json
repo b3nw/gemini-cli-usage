@@ -1,0 +1,13 @@
+{
+  "name": "gemini-usage-monitor",
+  "version": "2.0.0",
+  "description": "Monitor Google Cloud API usage against subscription plan limits",
+  "mcpServers": {
+    "usageMonitorServer": {
+      "command": "python3",
+      "args": ["${extensionPath}${/}src${/}usage_monitor.py"],
+      "cwd": "${extensionPath}"
+    }
+  }
+}
+
