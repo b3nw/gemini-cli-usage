@@ -386,31 +386,42 @@ def handle_mcp_request(request):
 def main():
     """Main MCP server loop."""
     log("Starting Gemini Usage Monitor (zero-dependency version)")
-    
+
+    # Check if running in a non-interactive session (e.g., with -p flag)
+    is_non_interactive = not sys.stdin.isatty()
+    if is_non_interactive:
+        log("Running in non-interactive mode. Will process one request and exit.")
+
     try:
         for line in sys.stdin:
             line = line.strip()
             if not line:
                 continue
-            
+
             try:
                 request = json.loads(line)
                 method = request.get("method", "unknown")
                 log(f"Received: {method}")
-                
+
                 response = handle_mcp_request(request)
-                
+
                 # Only send response if we have one and request had an id
                 if response is not None and "id" in request:
                     # Add jsonrpc version and request ID
                     response["jsonrpc"] = "2.0"
                     response["id"] = request["id"]
-                    
+
                     # Send response
                     print(json.dumps(response), flush=True)
+
+                    # If in non-interactive mode, exit after the first valid response
+                    if is_non_interactive:
+                        log("Request processed in non-interactive mode. Exiting.")
+                        break  # Exit loop
+
                 elif response is None:
                     log(f"Notification handled, no response")
-                
+
             except json.JSONDecodeError as e:
                 log(f"JSON decode error: {e}")
                 error_response = {
@@ -418,10 +429,14 @@ def main():
                     "error": {
                         "code": -32700,
                         "message": "Parse error"
-                    }
+                    },
                 }
                 print(json.dumps(error_response), flush=True)
-    
+                if is_non_interactive:
+                    break  # Exit loop
+
+        log("MCP server loop finished.")
+
     except KeyboardInterrupt:
         log("Server stopped by user")
     except Exception as e:
