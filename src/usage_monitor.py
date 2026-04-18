@@ -78,7 +78,7 @@ def refresh_access_token(refresh_token, creds_file):
     token_url = "https://oauth2.googleapis.com/token"
     
     # Client ID for Google OAuth (public client)
-    client_id = "764086051850-6qr4p6gpi6hn506pt8ejuq83di341hur.apps.googleusercontent.com"
+    client_id = "681255809395-oo8ft2oprdrnp9e3aqf6av3hmdib135j.apps.googleusercontent.com"
     
     data = {
         'client_id': client_id,
